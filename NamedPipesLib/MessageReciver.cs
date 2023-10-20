@@ -1,4 +1,4 @@
-﻿namespace AudioConsoleApp.Pipes
+﻿namespace AudioComment.NamedPipesLib
 {
     using System;
     using System.Collections.Generic;
@@ -43,6 +43,14 @@
                 await Recive();
             }
         }
+
+        //public async void StartThread()
+        //{
+        //    while (!cancelTokenSource.Token.IsCancellationRequested)
+        //    {
+        //        await Recive();
+        //    }
+        //}
 
         public void Stop()
         {

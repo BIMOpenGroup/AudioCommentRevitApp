@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamedPipesLib", "NamedPipesLib.csproj", "{B829FB97-781F-493C-8814-C34D7DAA69CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B829FB97-781F-493C-8814-C34D7DAA69CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B829FB97-781F-493C-8814-C34D7DAA69CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B829FB97-781F-493C-8814-C34D7DAA69CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B829FB97-781F-493C-8814-C34D7DAA69CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CEE005C-A461-4BED-9E81-5BE759500245}
+	EndGlobalSection
+EndGlobal

@@ -1,4 +1,4 @@
-﻿namespace AudioConsoleApp
+﻿namespace AudioComment.Console
 {
     using Spectre.Console;
     public static class Colors

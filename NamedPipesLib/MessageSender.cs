@@ -1,4 +1,4 @@
-﻿namespace AudioConsoleApp.Pipes
+﻿namespace AudioComment.NamedPipesLib
 {
     using System;
     using System.IO;
@@ -51,3 +51,4 @@
         }
     }
 }
+

@@ -1,30 +1,27 @@
-﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace AudioConsoleApp
+﻿namespace AudioComment.Console
 {
+    using NAudio.Wave;
+    using System;
+    using System.Linq;
+
     public class AudioVisualization
     {
-        public static void StartVisualization()
+        WaveInEvent waveIn;
+        public AudioVisualization()
         {
-            var waveIn = new NAudio.Wave.WaveInEvent
+            waveIn = new NAudio.Wave.WaveInEvent
             {
                 DeviceNumber = 0, // indicates which microphone to use
                 WaveFormat = new NAudio.Wave.WaveFormat(rate: 44100, bits: 16, channels: 1),
                 BufferMilliseconds = 20
             };
             waveIn.DataAvailable += WaveIn_DataAvailable;
-            waveIn.StartRecording();
 
-            Console.WriteLine("C# Audio Level Meter");
-            Console.WriteLine("(press any key to exit)");
 
-            static void WaveIn_DataAvailable(object? sender, NAudio.Wave.WaveInEventArgs e)
+            //Console.WriteLine("C# Audio Level Meter");
+            //Console.WriteLine("(press any key to exit)");
+
+            void WaveIn_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
             {
                 // copy buffer into an array of integers
                 Int16[] values = new Int16[e.Buffer.Length / 2];
@@ -34,12 +31,22 @@ namespace AudioConsoleApp
                 float fraction = (float)values.Max() / 32768;
 
                 // print a level meter using the console
-                string bar = new('#', (int)(fraction * 70));
+                string bar = new String('#', (int)(fraction * 70));
                 string meter = "[" + bar.PadRight(60, '-') + "]";
                 Console.CursorLeft = 0;
                 Console.CursorVisible = false;
                 Console.Write($"{meter} {fraction * 100:00.0}%");
             }
+        }
+
+        public void StartVisualization()
+        {
+            waveIn.StartRecording();
+        }
+
+        public void StopVisualization()
+        {
+            waveIn.StopRecording();
         }
     }
 }

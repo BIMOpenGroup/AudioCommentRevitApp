@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+    <AddIn Type="Application">
+        <Name>AudioAddin</Name>
+        <Assembly>C:\code\AudioCommentRevitAppConsole\AudioAddin\bin\Debug\AudioAddin.dll</Assembly>
+        <AddInId>540dba81-7704-4f86-959a-c6fa5b789241</AddInId>
+        <FullClassName>AudioAddin.AudioAddinApp</FullClassName>
+        <VendorId>BIM-openSorce</VendorId>
+    </AddIn>
+</RevitAddIns>
