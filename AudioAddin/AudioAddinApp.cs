@@ -1,37 +1,38 @@
 ﻿namespace AudioComment.Addin
 {
+    //using AudioComment.NamedPipesLib;
     using Autodesk.Revit.Attributes;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Autodesk.Revit.UI.Events;
+    using InterprocessCommunication.NamedPipeUtil;
+    using InterprocessCommunication.PipeDispatcherAbstract;
     using System;
-    using System.Collections.Generic;
+    using System.Drawing;
     using System.IO;
     using System.IO.Pipes;
-    using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Interop;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
 
     [Transaction(TransactionMode.Manual)]
     [RegenerationAttribute(RegenerationOption.Manual)]
-    public class AudioAddinApp: IExternalApplication
+    public class AudioAddinApp : IExternalApplication
     {
-        string audioAddinAppTabName = "testAudioApp";
-        static string pipeName = "AudioConsole1";
-        static NamedPipeClientStream client;
-        static StreamWriter writer;
-        static StreamReader reader;
-        static Task clientConnectTask;
+        static UIControlledApplication _uiControlApplication;
 
         public Result OnStartup(UIControlledApplication uiControlApplication)
         {
             try
             {
-                //RibbonPanel ribbonPanelCreated = CreationRibbonPanel(uiControlApplication, audioAddinAppTabName);
-                AddPushButton(uiControlApplication);
-                uiControlApplication.Idling += OnIdling;
-                Task.Factory.StartNew(() => StartNamePipeClient());
-                //System.Threading.Thread.Sleep(2000);
+                _uiControlApplication = uiControlApplication;
+                RibbonPanel ribbonPanel = uiControlApplication.CreateRibbonPanel("AudioAddin");
+                BitmapImage bitmapWarning = ToImageSource(SystemIcons.Warning) as BitmapImage;
+                BitmapImage bitmapAsterisk = ToImageSource(SystemIcons.Asterisk) as BitmapImage;
+                AddPushButton(ribbonPanel, "Record", "AudioComment.Addin.AudioCommandRecord", bitmapWarning);
+                AddPushButton(ribbonPanel, "Play", "AudioComment.Addin.AudioCommandPlay", bitmapAsterisk);
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -41,80 +42,41 @@
             }
         }
 
-        private static void OnIdling(object sender, IdlingEventArgs args)
-        {
-            try
-            {
-                if (!client.IsConnected && clientConnectTask.IsCompleted)
-                {
-                    clientConnectTask = client.ConnectAsync();
-                }
-                var test = reader?.ReadLine();
-                if (test != null)
-                {
-                    if (test == "quit")
-                    {
-                        TaskDialog.Show(test, test);
-                    }
-                    else if (test.Length > 100)
-                    {
-                        TaskDialog.Show("bytes", test.Length.ToString());
-                    }
-                    else
-                    {
-                        TaskDialog.Show(test, test);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        void StartNamePipeClient()
-        {
-            client = new NamedPipeClientStream(pipeName);
-            clientConnectTask = client.ConnectAsync();
-            reader = new StreamReader(client);
-            writer = new StreamWriter(client);
-        }
-
         public Result OnShutdown(UIControlledApplication uiControlApplication)
         {
-            uiControlApplication.Idling -= OnIdling;
+            //uiControlApplication.Idling -= OnIdling;
+            //_serverDispatcher.ReciveData -= OnReciveData;
             return Result.Succeeded;
         }
 
-        //public RibbonPanel CreationRibbonPanel(UIControlledApplication _application, string _nameRibbonPanel)
-        //{
-        //    //string tabName = audioAddinAppTabName;
-        //    //IList<RibbonPanel> list_Ribbon = _application.GetRibbonPanels();
-        //    //if (list_Ribbon.Where(a => a.Name == tabName).FirstOrDefault() != null)
-        //    //{
-        //    //    tabName += "1";
-        //    //}
-        //    //_application.CreateRibbonTab(tabName);
-        //    //RibbonPanel ribbonPanelCreated = _application.CreateRibbonPanel(tabName, _nameRibbonPanel);
-        //    //return ribbonPanelCreated;
-        //}
-
-        public void AddPushButton(UIControlledApplication uiControlApplication)
+        public void AddPushButton(RibbonPanel ribbonPanel, string name, string className, BitmapImage image)
         {
             try
             {
-                RibbonPanel ribbonPanel = uiControlApplication.CreateRibbonPanel("AudioAddin");
                 string _assemblyPath = $"C:\\code\\AudioCommentRevitAppConsole\\AudioAddin\\bin\\Debug\\AudioAddin.dll";
-                PushButtonData pushButtonData = new PushButtonData(audioAddinAppTabName,
-                                                                    audioAddinAppTabName,
+                PushButtonData pushButtonData = new PushButtonData(name,
+                                                                    name,
                                                                     _assemblyPath,
-                                                                    "AudioComment.Addin.AudioAddinCommand");
+                                                                    className);
+
+                pushButtonData.ToolTipImage = image;
                 PushButton button = ribbonPanel.AddItem(pushButtonData) as PushButton;
             }
             catch (Exception ex)
             {
                 TaskDialog.Show("fail", ex.Message);
             }
+        }
+
+        private ImageSource ToImageSource(Icon icon)
+        {
+            ImageSource imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                icon.Handle,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions()
+            );
+
+            return imageSource;
         }
     }
 }

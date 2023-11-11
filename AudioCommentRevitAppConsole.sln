@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioAddin", "AudioAddin\AudioAddin.csproj", "{5EDB2219-0FD1-49DA-91B9-339D759EA6E3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7BB2E593-5315-4C4D-9776-E03456681560} = {7BB2E593-5315-4C4D-9776-E03456681560}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioConsoleAppNetF", "AudioConsoleAppNetF\AudioConsoleAppNetF.csproj", "{7BB2E593-5315-4C4D-9776-E03456681560}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{5EDB2219-0FD1-49DA-91B9-339D759EA6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EDB2219-0FD1-49DA-91B9-339D759EA6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EDB2219-0FD1-49DA-91B9-339D759EA6E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BB2E593-5315-4C4D-9776-E03456681560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BB2E593-5315-4C4D-9776-E03456681560}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BB2E593-5315-4C4D-9776-E03456681560}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BB2E593-5315-4C4D-9776-E03456681560}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
