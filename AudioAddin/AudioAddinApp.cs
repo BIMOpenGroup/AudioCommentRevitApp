@@ -1,17 +1,13 @@
 ﻿namespace AudioComment.Addin
 {
-    //using AudioComment.NamedPipesLib;
+    using AudioAddin;
     using Autodesk.Revit.Attributes;
     using Autodesk.Revit.DB;
     using Autodesk.Revit.UI;
     using Autodesk.Revit.UI.Events;
-    using InterprocessCommunication.NamedPipeUtil;
-    using InterprocessCommunication.PipeDispatcherAbstract;
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
-    using System.IO;
-    using System.IO.Pipes;
-    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Interop;
     using System.Windows.Media;
@@ -21,18 +17,28 @@
     [RegenerationAttribute(RegenerationOption.Manual)]
     public class AudioAddinApp : IExternalApplication
     {
-        static UIControlledApplication _uiControlApplication;
+        public static UIControlledApplication _uiControlApplication;
+        public static ExtensibleStorageUtils _extStorageUtils;
+        public string _userName;
 
         public Result OnStartup(UIControlledApplication uiControlApplication)
         {
             try
             {
-                _uiControlApplication = uiControlApplication;
                 RibbonPanel ribbonPanel = uiControlApplication.CreateRibbonPanel("AudioAddin");
                 BitmapImage bitmapWarning = ToImageSource(SystemIcons.Warning) as BitmapImage;
                 BitmapImage bitmapAsterisk = ToImageSource(SystemIcons.Asterisk) as BitmapImage;
                 AddPushButton(ribbonPanel, "Record", "AudioComment.Addin.AudioCommandRecord", bitmapWarning);
                 AddPushButton(ribbonPanel, "Play", "AudioComment.Addin.AudioCommandPlay", bitmapAsterisk);
+                uiControlApplication.Idling += OnIdling;
+                _uiControlApplication = uiControlApplication;
+                _extStorageUtils = new ExtensibleStorageUtils(
+                    "a3dcbbab-1faf-403d-a951-e3de809e0808",
+                    "BIM-openSorce",
+                    "AudioAddin",
+                    "SoundMessageLocation",
+                    "UsersWhoListened");
+                _userName = Environment.UserName;
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -44,7 +50,7 @@
 
         public Result OnShutdown(UIControlledApplication uiControlApplication)
         {
-            //uiControlApplication.Idling -= OnIdling;
+            uiControlApplication.Idling -= OnIdling;
             //_serverDispatcher.ReciveData -= OnReciveData;
             return Result.Succeeded;
         }
@@ -77,6 +83,73 @@
             );
 
             return imageSource;
+        }
+
+        //private void RegisterUpdater(Document doc)
+        //{
+        //    // Создаем экземпляр Updater
+        //    AddInId addinId = new AddInId(new Guid("540dba81-7704-4f86-959a-c6fa5b789241"));
+        //    ElementAudioUpdater updater = new ElementAudioUpdater(addinId);
+
+        //    // Получаем UpdaterId
+        //    UpdaterId updaterId = updater.GetUpdaterId();
+
+        //    // Записываем UpdaterId в документ для будущей деактивации
+        //    UpdaterRegistry.RegisterUpdater(updater);
+        //    UpdaterRegistry.AddTrigger(updaterId, )
+        //}
+
+        private void OnIdling(object sender, IdlingEventArgs e)
+        {
+            try
+            {
+                var uiapp = (UIApplication)sender;
+                var uidoc = uiapp.ActiveUIDocument;
+                var selection = uidoc?.Selection;
+                var doc = uidoc?.Document;
+                if (selection != null)
+                {
+                    var elemsIds = selection.GetElementIds();
+                    if (elemsIds.Count > 0)
+                    {
+                        var newElemensIds = new List<ElementId>();
+                        bool isMessage = false;
+                        foreach (var id in elemsIds)
+                        {
+                            string sound = _extStorageUtils.GetSoundMessage(doc, id);
+                            string usersList = _extStorageUtils.GetUsersList(doc, id);
+                            TaskDialogResult stopSoundResult = TaskDialogResult.None;
+                            if (!string.IsNullOrEmpty(sound) && !usersList.Contains(_userName))
+                            {
+                                var taskDialog2 = new TaskDialog("Прослушать звуковое сообщение?");
+                                taskDialog2.MainContent = $"Данный элемент: {id.IntegerValue} содержит звуковое сообщение, хотите прослушать его?";
+                                taskDialog2.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel;
+                                stopSoundResult = taskDialog2.Show();
+                                isMessage = true;
+                                if (stopSoundResult == TaskDialogResult.Ok)
+                                {
+                                    AudioCommandPlay.PlayFromByte(sound);
+                                    usersList += $"{usersList},{_userName}";
+                                    _extStorageUtils.WriteUsersList(doc, id, usersList);
+                                }
+                            }
+                            if (stopSoundResult == TaskDialogResult.Ok || stopSoundResult == TaskDialogResult.None)
+                            {
+                                newElemensIds.Add(id);
+                            }
+                        }
+                        if (isMessage)
+                        {
+                            selection.SetElementIds(newElemensIds);
+                        }
+                    }
+                }
+                //var selEmenets = selection.GetElementIds();
+            }
+            catch (Exception ex)
+            {
+                TaskDialog.Show("Exception", ex.Message);
+            }
         }
     }
 }
