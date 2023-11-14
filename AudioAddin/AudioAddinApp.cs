@@ -133,6 +133,9 @@
                                     AudioCommandPlay.PlayFromByte(sound);
                                     usersList += $"{usersList},{_userName}";
                                     _extStorageUtils.WriteUsersList(doc, id, usersList);
+                                    var taskDialog = new TaskDialog("Списо прослушавших пользователей");
+                                    taskDialog.MainContent = $"Прослушали: {usersList}";
+                                    taskDialog.Show();
                                 }
                             }
                             if (stopSoundResult == TaskDialogResult.Ok || stopSoundResult == TaskDialogResult.None)

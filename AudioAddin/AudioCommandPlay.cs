@@ -32,15 +32,19 @@
 
                 if (elementid != null)
                 {
-                    //using (var recorder = new RecordWav())
-                    //{
                     var element = uidoc.Document.GetElement(elementid);
                     string sound = AudioAddinApp._extStorageUtils.GetSoundMessage(uidoc.Document, elementid);
                     if (!string.IsNullOrEmpty(sound))
                     {
                         PlayFromByte(sound);
                     }
-                    //}
+                    string usersList = AudioAddinApp._extStorageUtils.GetUsersList(uidoc.Document, elementid);
+                    if (!string.IsNullOrEmpty(usersList))
+                    {
+                        var taskDialog = new TaskDialog("Списо прослушавших пользователей");
+                        taskDialog.MainContent = $"Прослушали: {usersList}";
+                        taskDialog.Show();
+                    }
                 }
                 return Result.Succeeded;
             }
