@@ -51,10 +51,6 @@ namespace AudioComment.Addin
                     writer?.Flush();
                     writer?.Dispose();
                     waveToMP3Task.Start();
-                    //waveToMP3Task = Task.Factory.StartNew(() =>
-                    //{
-                    //    WaveToMP3(wavFile, mp3File);
-                    //});
                 };
             }
             catch (Exception ex)

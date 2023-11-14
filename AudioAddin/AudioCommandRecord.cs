@@ -54,7 +54,7 @@
                     {
                         using (var recorder = new RecordWav())
                         {
-                            var test = Task.Factory.StartNew(() => { 
+                            Task.Factory.StartNew(() => { 
                                 recorder.Create();
                                 recorder.buttonRecord();
                             });

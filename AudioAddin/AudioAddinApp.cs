@@ -26,8 +26,8 @@
             try
             {
                 RibbonPanel ribbonPanel = uiControlApplication.CreateRibbonPanel("AudioAddin");
-                BitmapImage bitmapWarning = ToImageSource(SystemIcons.Warning) as BitmapImage;
-                BitmapImage bitmapAsterisk = ToImageSource(SystemIcons.Asterisk) as BitmapImage;
+                ImageSource bitmapWarning = ToImageSource(SystemIcons.Warning);
+                ImageSource bitmapAsterisk = ToImageSource(SystemIcons.Asterisk);
                 AddPushButton(ribbonPanel, "Record", "AudioComment.Addin.AudioCommandRecord", bitmapWarning);
                 AddPushButton(ribbonPanel, "Play", "AudioComment.Addin.AudioCommandPlay", bitmapAsterisk);
                 uiControlApplication.Idling += OnIdling;
@@ -55,7 +55,7 @@
             return Result.Succeeded;
         }
 
-        public void AddPushButton(RibbonPanel ribbonPanel, string name, string className, BitmapImage image)
+        public void AddPushButton(RibbonPanel ribbonPanel, string name, string className, ImageSource image)
         {
             try
             {
@@ -66,6 +66,8 @@
                                                                     className);
 
                 pushButtonData.ToolTipImage = image;
+                pushButtonData.LargeImage = image;
+                pushButtonData.Image = image;
                 PushButton button = ribbonPanel.AddItem(pushButtonData) as PushButton;
             }
             catch (Exception ex)
