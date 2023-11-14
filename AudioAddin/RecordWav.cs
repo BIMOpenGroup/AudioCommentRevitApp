@@ -13,7 +13,7 @@ namespace AudioComment.Addin
         string tempPath = System.IO.Path.GetTempPath();
         string wavFile = Path.Combine("C:\\test\\soundTest", "test1.wav");
         string mp3File = Path.Combine("C:\\test\\soundTest", "test1.mp3");
-        Task waveToMP3Task;
+        public Task waveToMP3Task;
 
         public RecordWav()
         {
@@ -31,6 +31,11 @@ namespace AudioComment.Addin
                     BufferMilliseconds = 20
                 };
                 writer = new WaveFileWriter(wavFile, waveIn.WaveFormat);
+                waveToMP3Task = new Task(() =>
+                {
+                    WaveToMP3(wavFile, mp3File);
+                });
+
 
                 waveIn.DataAvailable += (s, a) =>
                 {
@@ -45,7 +50,11 @@ namespace AudioComment.Addin
                 {
                     writer?.Flush();
                     writer?.Dispose();
-                    WaveToMP3(wavFile, mp3File);
+                    waveToMP3Task.Start();
+                    //waveToMP3Task = Task.Factory.StartNew(() =>
+                    //{
+                    //    WaveToMP3(wavFile, mp3File);
+                    //});
                 };
             }
             catch (Exception ex)

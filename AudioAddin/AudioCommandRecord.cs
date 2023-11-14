@@ -65,7 +65,7 @@
                             if (stopSoundResult == TaskDialogResult.Ok | stopSoundResult == TaskDialogResult.Cancel)
                             {
                                 recorder.buttonStop();
-                                test.Wait();
+                                recorder.waveToMP3Task.Wait();
                                 sound = recorder.GetBytes();
                             }
                             else
