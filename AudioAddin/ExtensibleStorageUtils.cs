@@ -39,13 +39,13 @@ namespace AudioAddin
             // Проверяем наличие Extensible Storage
             if (element.IsValidObject)
             {
-                var schema = GetSchema(_schemaGuid);
+                var schema = GetSchema(_schemaGuid);//вернул 
                 if (schema != null)
                 {
                     //Schema schema = GetOrCreateSchema(_schemaGuid);
                     Entity entity = GetEntity(element, schema);
                     // Проверяем наличие поля
-                    if (entity.IsValid())
+                    if (entity != null && entity.IsValid())
                     {
                         Field field = schema.GetField(fieldName);
                         string fieldString = entity.Get<string>(field);
