@@ -87,20 +87,6 @@
             return imageSource;
         }
 
-        //private void RegisterUpdater(Document doc)
-        //{
-        //    // Создаем экземпляр Updater
-        //    AddInId addinId = new AddInId(new Guid("540dba81-7704-4f86-959a-c6fa5b789241"));
-        //    ElementAudioUpdater updater = new ElementAudioUpdater(addinId);
-
-        //    // Получаем UpdaterId
-        //    UpdaterId updaterId = updater.GetUpdaterId();
-
-        //    // Записываем UpdaterId в документ для будущей деактивации
-        //    UpdaterRegistry.RegisterUpdater(updater);
-        //    UpdaterRegistry.AddTrigger(updaterId, )
-        //}
-
         private void OnIdling(object sender, IdlingEventArgs e)
         {
             try
@@ -149,7 +135,6 @@
                         }
                     }
                 }
-                //var selEmenets = selection.GetElementIds();
             }
             catch (Exception ex)
             {

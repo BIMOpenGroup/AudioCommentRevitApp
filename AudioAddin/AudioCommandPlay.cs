@@ -41,7 +41,7 @@
                     string usersList = AudioAddinApp._extStorageUtils.GetUsersList(uidoc.Document, elementid);
                     if (!string.IsNullOrEmpty(usersList))
                     {
-                        var taskDialog = new TaskDialog("Списо прослушавших пользователей");
+                        var taskDialog = new TaskDialog("Список прослушавших пользователей");
                         taskDialog.MainContent = $"Прослушали: {usersList}";
                         taskDialog.Show();
                     }

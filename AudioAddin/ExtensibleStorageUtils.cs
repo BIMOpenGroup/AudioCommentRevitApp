@@ -39,7 +39,7 @@ namespace AudioAddin
             // Проверяем наличие Extensible Storage
             if (element.IsValidObject)
             {
-                var schema = GetSchema(_schemaGuid);//вернул 
+                var schema = GetSchema(_schemaGuid);//вернул GetSchema чтбы схема не создавалась в событии OnIdling
                 if (schema != null)
                 {
                     //Schema schema = GetOrCreateSchema(_schemaGuid);
@@ -48,9 +48,12 @@ namespace AudioAddin
                     if (entity != null && entity.IsValid())
                     {
                         Field field = schema.GetField(fieldName);
-                        string fieldString = entity.Get<string>(field);
-                        if (!string.IsNullOrEmpty(fieldString))
-                            return fieldString;
+                        if (field != null)
+                        {
+                            string fieldString = entity.Get<string>(field);
+                            if (!string.IsNullOrEmpty(fieldString))
+                                return fieldString;
+                        }
                     }
                 }
             }

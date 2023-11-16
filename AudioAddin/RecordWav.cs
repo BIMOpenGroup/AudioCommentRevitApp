@@ -15,11 +15,6 @@ namespace AudioComment.Addin
         string mp3File = Path.Combine("C:\\test\\soundTest", "test1.mp3");
         public Task waveToMP3Task;
 
-        public RecordWav()
-        {
- 
-        }
-
         public void Create()
         {
             try
@@ -84,7 +79,7 @@ namespace AudioComment.Addin
             return File.ReadAllBytes(mp3File);
         }
 
-        public static void WaveToMP3(string waveFileName, string mp3FileName, int bitRate = 128)
+        public static void WaveToMP3(string waveFileName, string mp3FileName)
         {
 
             using (var reader = new WaveFileReader(waveFileName))
