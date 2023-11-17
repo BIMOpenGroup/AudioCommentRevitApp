@@ -10,9 +10,9 @@ namespace AudioComment.Addin
     {
         WaveInEvent waveIn;
         WaveFileWriter writer;
-        string tempPath = System.IO.Path.GetTempPath();
-        string wavFile = Path.Combine("C:\\test\\soundTest", "test1.wav");
-        string mp3File = Path.Combine("C:\\test\\soundTest", "test1.mp3");
+        //string tempPath = System.IO.Path.GetTempPath();
+        string wavFile = Path.Combine(System.IO.Path.GetTempPath(), "test1.wav");
+        string mp3File = Path.Combine(System.IO.Path.GetTempPath(), "test1.mp3");
         public Task waveToMP3Task;
 
         public void Create()
